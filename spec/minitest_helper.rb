@@ -1,0 +1,5 @@
+require 'coverage_helper'
+require 'hierarchical_graph'
+require 'minitest/autorun'
+require 'minitest/colorin'
+require 'pry-nav'
