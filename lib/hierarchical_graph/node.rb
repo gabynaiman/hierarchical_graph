@@ -37,6 +37,11 @@ class HierarchicalGraph
       parents.empty?
     end
 
+    def to_s
+      "<#{self.class.name} #{id} parents:[#{parents.map(&:id).join(', ')}] children:[#{children.map(&:id).join(', ')}]>"
+    end
+    alias_method :inspect, :to_s
+
     private
 
     attr_reader :graph

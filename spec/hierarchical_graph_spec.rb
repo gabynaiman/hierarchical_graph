@@ -223,6 +223,15 @@ describe HierarchicalGraph do
     graph.tsort.map(&:id).must_equal [2, 4, 3, 1]
   end
 
+  it 'To string' do
+    graph = HierarchicalGraph.new
+    graph.add_node 1
+    graph.add_node 2
+    graph.add_relation parent_id: 1, child_id: 2
+
+    graph.to_s.must_equal '<HierarchicalGraph nodes:[<HierarchicalGraph::Node 1 parents:[] children:[2]>, <HierarchicalGraph::Node 2 parents:[1] children:[]>]>'
+  end
+
   describe 'Node' do
 
     let :graph do

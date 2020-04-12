@@ -90,6 +90,11 @@ class HierarchicalGraph
     end.uniq(&:id)
   end
 
+  def to_s
+    "<#{self.class.name} nodes:[#{map(&:to_s).join(', ')}]>"
+  end
+  alias_method :inspect, :to_s
+
   private
 
   attr_reader :nodes, :parent_to_children, :child_to_parents, :ancestors_cache, :descendants_cache
