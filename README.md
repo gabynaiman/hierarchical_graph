@@ -25,8 +25,45 @@ Or install it yourself as:
 
 ## Usage
 
+### Build graph
 ```ruby
+graph = HierarchicalGraph.new
 
+graph.add_node 1, name: 'Node 1', other: 1000
+graph.add_node 2
+graph.add_node 3
+
+graph.add_relation parent_id: 1, child_id: 2
+graph.add_relation parent_id: 2, child_id: 3
+```
+
+### Navigate graph
+```ruby
+graph[1] # <Node 1>
+graph.roots # [<Node 1>, <Node 2>]
+graph.parents_of(3) # [<Node 2>]
+graph.ancestors_of(3) # [<Node 1>, <Node 2>]
+graph.children_of(1) # [<Node 2>]
+graph.descendants_of(1) # [<Node 2>, <Node 3>]
+```
+
+### Node
+```ruby
+node = graph[node_id]
+
+node.id # node_id
+node.root? # true/false
+
+node.data # {key_1: val_1, key_2: val_2}
+node.data[:key_1] # val_1
+node.data[:key_3] = val_3
+node[:key_1] # val_1
+node[:key_3] = val_3
+
+node.parents # [<Node>, ...]
+node.ancestors # [<Node>, ...]
+node.children # [<Node>, ...]
+node.descendants # [<Node>, ...]
 ```
 
 ## Contributing
