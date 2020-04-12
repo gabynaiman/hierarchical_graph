@@ -1,4 +1,4 @@
-# StringExt
+# HierarchicalGraph
 
 [![Gem Version](https://badge.fury.io/rb/hierarchical_graph.svg)](https://rubygems.org/gems/hierarchical_graph)
 [![Build Status](https://travis-ci.org/gabynaiman/hierarchical_graph.svg?branch=master)](https://travis-ci.org/gabynaiman/hierarchical_graph)
