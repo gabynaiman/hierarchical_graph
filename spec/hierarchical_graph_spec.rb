@@ -5,7 +5,7 @@ describe HierarchicalGraph do
   it 'Empty graph' do
     graph = HierarchicalGraph.new
 
-    graph.nodes.must_be_empty
+    graph.must_be_empty
   end
 
   it 'Add node' do
@@ -14,7 +14,7 @@ describe HierarchicalGraph do
     node = graph.add_node 1
 
     graph[1].must_equal node
-    graph.nodes.count.must_equal 1
+    graph.count.must_equal 1
   end
 
   it 'Remove node' do
@@ -24,7 +24,7 @@ describe HierarchicalGraph do
     graph.remove_node 1
 
     graph[1].must_be_nil
-    graph.nodes.must_be_empty
+    graph.must_be_empty
   end
 
   it 'Remove invalid node' do
@@ -65,7 +65,7 @@ describe HierarchicalGraph do
 
     graph.remove_relation parent_id: 1, child_id: 2
     graph.children_of(1).must_be_empty
-    graph.nodes.count 2
+    graph.count 2
   end
 
   it 'Remove relation in complex graph' do

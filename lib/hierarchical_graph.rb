@@ -3,10 +3,11 @@ require_relative 'hierarchical_graph/node'
 
 class HierarchicalGraph
 
+  include Enumerable
   include TSort
 
   def initialize
-    @index = {}
+    @nodes = {}
     @parent_to_children = Hash.new { |h,k| h[k] = Set.new }
     @child_to_parents = Hash.new { |h,k| h[k] = Set.new }
     @ancestors_cache = {}
@@ -14,20 +15,24 @@ class HierarchicalGraph
   end
 
   def [](id)
-    index[id]
+    nodes[id]
   end
 
-  def nodes
-    index.values
+  def each(&block)
+    nodes.each_value(&block)
+  end
+
+  def empty?
+    nodes.empty?
   end
 
   def roots
-    nodes.select(&:root?)
+    select(&:root?)
   end
 
   def add_node(id, attributes={})
     clear_cache
-    index[id] = Node.new self, id, attributes
+    nodes[id] = Node.new self, id, attributes
   end
 
   def remove_node(id)
@@ -39,7 +44,7 @@ class HierarchicalGraph
     parent_to_children.delete id
     child_to_parents.delete id
 
-    index.delete id
+    nodes.delete id
     clear_cache
 
     nil
@@ -66,11 +71,11 @@ class HierarchicalGraph
   end
 
   def parents_of(id)
-    child_to_parents[id].map { |node_id| index[node_id] }
+    child_to_parents[id].map { |node_id| nodes[node_id] }
   end
 
   def children_of(id)
-    parent_to_children[id].map { |node_id| index[node_id] }
+    parent_to_children[id].map { |node_id| nodes[node_id] }
   end
 
   def ancestors_of(id)
@@ -87,10 +92,10 @@ class HierarchicalGraph
 
   private
 
-  attr_reader :index, :parent_to_children, :child_to_parents, :ancestors_cache, :descendants_cache
+  attr_reader :nodes, :parent_to_children, :child_to_parents, :ancestors_cache, :descendants_cache
 
   def validate!(*ids)
-    invalid_ids = ids.reject { |id| index.key? id }
+    invalid_ids = ids.reject { |id| nodes.key? id }
     raise "Invalid nodes: #{invalid_ids.join(', ')}" if invalid_ids.any?
   end
 
@@ -104,7 +109,7 @@ class HierarchicalGraph
   end
 
   def tsort_each_node(&block)
-    nodes.each(&block)
+    each(&block)
   end
 
 end
