@@ -45,6 +45,6 @@ class HierarchicalGraph
     private
 
     attr_reader :graph
- 
+
   end
 end

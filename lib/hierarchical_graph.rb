@@ -52,11 +52,11 @@ class HierarchicalGraph
 
   def add_relation(parent_id:, child_id:)
     validate! parent_id, child_id
-    
+
     clear_cache
     parent_to_children[parent_id] << child_id
     child_to_parents[child_id] << parent_id
-    
+
     nil
   end
 
@@ -66,7 +66,7 @@ class HierarchicalGraph
     clear_cache
     parent_to_children[parent_id].delete child_id
     child_to_parents[child_id].delete parent_id
-    
+
     nil
   end
 
