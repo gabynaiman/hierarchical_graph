@@ -10,7 +10,7 @@ describe HierarchicalGraph do
 
   it 'Add node' do
     graph = HierarchicalGraph.new
-    
+
     node = graph.add_node 1
 
     graph[1].must_equal node
@@ -20,7 +20,7 @@ describe HierarchicalGraph do
   it 'Remove node' do
     graph = HierarchicalGraph.new
     graph.add_node 1
-    
+
     graph.remove_node 1
 
     graph[1].must_be_nil
@@ -29,7 +29,7 @@ describe HierarchicalGraph do
 
   it 'Remove invalid node' do
     graph = HierarchicalGraph.new
-    
+
     error = proc { graph.remove_node 1 }.must_raise RuntimeError
     error.message.must_equal "Invalid nodes: 1"
   end
@@ -38,7 +38,7 @@ describe HierarchicalGraph do
     graph = HierarchicalGraph.new
     graph.add_node 1
     graph.add_node 2
-    
+
     graph.add_relation parent_id: 1, child_id: 2
 
     graph.parents_of(1).must_be_empty
@@ -50,7 +50,7 @@ describe HierarchicalGraph do
 
   it 'Add relation with invalid nodes' do
     graph = HierarchicalGraph.new
-    
+
     error = proc { graph.add_relation parent_id: 1, child_id: 2 }.must_raise RuntimeError
     error.message.must_equal "Invalid nodes: 1, 2"
   end
@@ -70,7 +70,7 @@ describe HierarchicalGraph do
 
   it 'Remove relation in complex graph' do
     graph = HierarchicalGraph.new
-    
+
     graph.add_node 0
     graph.add_node 1
     graph.add_node 2
