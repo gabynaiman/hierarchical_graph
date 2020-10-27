@@ -223,6 +223,18 @@ describe HierarchicalGraph do
     graph.tsort.map(&:id).must_equal [2, 4, 3, 1]
   end
 
+  it 'Marshal' do
+    graph = HierarchicalGraph.new
+    graph.add_node 1
+    graph.add_node 2
+    graph.add_relation parent_id: 1, child_id: 2
+
+    dump = Marshal.dump graph
+    loaded = Marshal.load dump
+
+    loaded.to_s.must_equal graph.to_s
+  end
+
   it 'To string' do
     graph = HierarchicalGraph.new
     graph.add_node 1
