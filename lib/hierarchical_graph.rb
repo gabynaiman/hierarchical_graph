@@ -8,8 +8,8 @@ class HierarchicalGraph
 
   def initialize
     @nodes = {}
-    @parent_to_children = {} # { |h,k| h[k] = Set.new }
-    @child_to_parents = {} # { |h,k| h[k] = Set.new }
+    @parent_to_children = {}
+    @child_to_parents = {}
     @ancestors_cache = {}
     @descendants_cache = {}
   end
