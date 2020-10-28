@@ -32,8 +32,8 @@ class HierarchicalGraph
 
   def add_node(id, attributes={})
     clear_cache
-    parent_to_children[id] = Set.new
-    child_to_parents[id] = Set.new
+    parent_to_children[id] ||= Set.new
+    child_to_parents[id] ||= Set.new
     nodes[id] = Node.new self, id, attributes
   end
 
@@ -73,11 +73,11 @@ class HierarchicalGraph
   end
 
   def parents_of(id)
-    child_to_parents[id].map { |node_id| nodes[node_id] }
+    child_to_parents.fetch(id, Set.new).map { |node_id| nodes[node_id] }
   end
 
   def children_of(id)
-    parent_to_children[id].map { |node_id| nodes[node_id] }
+    parent_to_children.fetch(id, Set.new).map { |node_id| nodes[node_id] }
   end
 
   def ancestors_of(id)
