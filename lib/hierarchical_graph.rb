@@ -31,14 +31,16 @@ class HierarchicalGraph
   end
 
   def add_node(id, attributes={})
+    validate_not_present! id
+
     clear_cache
-    parent_to_children[id] ||= Set.new
-    child_to_parents[id] ||= Set.new
+    parent_to_children[id] = Set.new
+    child_to_parents[id] = Set.new
     nodes[id] = Node.new self, id, attributes
   end
 
   def remove_node(id)
-    validate! id
+    validate_present! id
 
     parent_to_children[id].each { |child_id| child_to_parents[child_id].delete id }
     child_to_parents[id].each { |parent_id| parent_to_children[parent_id].delete id }
@@ -53,7 +55,7 @@ class HierarchicalGraph
   end
 
   def add_relation(parent_id:, child_id:)
-    validate! parent_id, child_id
+    validate_present! parent_id, child_id
 
     clear_cache
     parent_to_children[parent_id] << child_id
@@ -63,7 +65,7 @@ class HierarchicalGraph
   end
 
   def remove_relation(parent_id:, child_id:)
-    validate! parent_id, child_id
+    validate_present! parent_id, child_id
 
     clear_cache
     parent_to_children[parent_id].delete child_id
@@ -73,20 +75,28 @@ class HierarchicalGraph
   end
 
   def parents_of(id)
-    child_to_parents.fetch(id, Set.new).map { |node_id| nodes[node_id] }
+    validate_present! id
+
+    child_to_parents[id].map { |node_id| nodes[node_id] }
   end
 
   def children_of(id)
-    parent_to_children.fetch(id, Set.new).map { |node_id| nodes[node_id] }
+    validate_present! id
+
+    parent_to_children[id].map { |node_id| nodes[node_id] }
   end
 
   def ancestors_of(id)
+    validate_present! id
+
     ancestors_cache[id] ||= parents_of(id).flat_map do |parent|
       ancestors_of(parent.id) + [parent]
     end.uniq(&:id)
   end
 
   def descendants_of(id)
+    validate_present! id
+
     children_of(id).flat_map do |child|
       [child] + descendants_of(child.id)
     end.uniq(&:id)
@@ -101,8 +111,13 @@ class HierarchicalGraph
 
   attr_reader :nodes, :parent_to_children, :child_to_parents, :ancestors_cache, :descendants_cache
 
-  def validate!(*ids)
+  def validate_present!(*ids)
     invalid_ids = ids.reject { |id| nodes.key? id }
+    raise "Invalid nodes: #{invalid_ids.join(', ')}" if invalid_ids.any?
+  end
+
+  def validate_not_present!(*ids)
+    invalid_ids = ids.select { |id| nodes.key? id }
     raise "Invalid nodes: #{invalid_ids.join(', ')}" if invalid_ids.any?
   end
 
