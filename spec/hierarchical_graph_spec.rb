@@ -17,6 +17,15 @@ describe HierarchicalGraph do
     graph.count.must_equal 1
   end
 
+  it 'Add duplicated node' do
+    graph = HierarchicalGraph.new
+
+    graph.add_node 1
+
+    error = proc { graph.add_node 1 }.must_raise RuntimeError
+    error.message.must_equal "Nodes already exist: 1"
+  end
+
   it 'Remove node' do
     graph = HierarchicalGraph.new
     graph.add_node 1
@@ -31,7 +40,7 @@ describe HierarchicalGraph do
     graph = HierarchicalGraph.new
 
     error = proc { graph.remove_node 1 }.must_raise RuntimeError
-    error.message.must_equal "Invalid nodes: 1"
+    error.message.must_equal "Nodes not found: 1"
   end
 
   it 'Add relation' do
@@ -52,7 +61,7 @@ describe HierarchicalGraph do
     graph = HierarchicalGraph.new
 
     error = proc { graph.add_relation parent_id: 1, child_id: 2 }.must_raise RuntimeError
-    error.message.must_equal "Invalid nodes: 1, 2"
+    error.message.must_equal "Nodes not found: 1, 2"
   end
 
   it 'Remove relation' do
@@ -102,7 +111,7 @@ describe HierarchicalGraph do
     graph = HierarchicalGraph.new
 
     error = proc { graph.remove_relation parent_id: 1, child_id: 2 }.must_raise RuntimeError
-    error.message.must_equal "Invalid nodes: 1, 2"
+    error.message.must_equal "Nodes not found: 1, 2"
   end
 
   it 'Roots' do
