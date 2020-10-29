@@ -113,12 +113,12 @@ class HierarchicalGraph
 
   def validate_present!(*ids)
     invalid_ids = ids.reject { |id| nodes.key? id }
-    raise "Invalid nodes: #{invalid_ids.join(', ')}" if invalid_ids.any?
+    raise "Invalid nodes (not present): #{invalid_ids.join(', ')}" if invalid_ids.any?
   end
 
   def validate_not_present!(*ids)
     invalid_ids = ids.select { |id| nodes.key? id }
-    raise "Invalid nodes: #{invalid_ids.join(', ')}" if invalid_ids.any?
+    raise "Invalid nodes (already present): #{invalid_ids.join(', ')}" if invalid_ids.any?
   end
 
   def clear_cache
