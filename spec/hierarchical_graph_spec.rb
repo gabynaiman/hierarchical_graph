@@ -253,6 +253,68 @@ describe HierarchicalGraph do
     graph.to_s.must_equal '<HierarchicalGraph nodes:[<HierarchicalGraph::Node 1 parents:[] children:[2]>, <HierarchicalGraph::Node 2 parents:[1] children:[]>]>'
   end
 
+  it 'Subgraph' do
+    graph = HierarchicalGraph.new
+    graph.add_node 1
+    graph.add_node 2
+    graph.add_node 3
+    graph.add_node 4
+    graph.add_node 5
+    graph.add_node 6
+    graph.add_relation parent_id: 1, child_id: 2
+    graph.add_relation parent_id: 1, child_id: 3
+    graph.add_relation parent_id: 2, child_id: 4
+    graph.add_relation parent_id: 3, child_id: 4
+    graph.add_relation parent_id: 3, child_id: 5
+    graph.add_relation parent_id: 4, child_id: 5
+    graph.add_relation parent_id: 5, child_id: 6
+
+    subgraph = graph.subgraph_of [3, 4, 5]
+
+    subgraph.map(&:id).must_equal [3, 4, 5]
+
+    subgraph[3].parents.must_be_empty
+    subgraph[3].children.map(&:id).must_equal [4, 5]
+
+    subgraph[4].parents.map(&:id).must_equal [3]
+    subgraph[4].children.map(&:id).must_equal [5]
+    
+    subgraph[5].parents.map(&:id).must_equal [3, 4]
+    subgraph[5].children.must_be_empty
+  end
+
+  it 'Descendants Subgraph' do
+    graph = HierarchicalGraph.new
+    graph.add_node 1
+    graph.add_node 2
+    graph.add_node 3
+    graph.add_node 4
+    graph.add_node 5
+    graph.add_node 6
+    graph.add_relation parent_id: 1, child_id: 2
+    graph.add_relation parent_id: 1, child_id: 3
+    graph.add_relation parent_id: 3, child_id: 4
+    graph.add_relation parent_id: 3, child_id: 5
+    graph.add_relation parent_id: 4, child_id: 5
+    graph.add_relation parent_id: 5, child_id: 6
+
+    subgraph = graph.descendants_subgraph_from 3
+
+    subgraph.map(&:id).must_equal [3, 4, 5, 6]
+    
+    subgraph[3].parents.must_be_empty
+    subgraph[3].children.map(&:id).must_equal [4, 5]
+
+    subgraph[4].parents.map(&:id).must_equal [3]
+    subgraph[4].children.map(&:id).must_equal [5]
+    
+    subgraph[5].parents.map(&:id).must_equal [3, 4]
+    subgraph[5].children.map(&:id).must_equal [6]
+
+    subgraph[6].parents.map(&:id).must_equal [5]
+    subgraph[6].children.must_be_empty
+  end
+
   describe 'Node' do
 
     let :graph do
@@ -310,6 +372,16 @@ describe HierarchicalGraph do
       graph[2].data.must_equal name: 'Node 2', code: 'node_2'
       graph[2][:name].must_equal 'Node 2'
       graph[2][:code].must_equal 'node_2'
+    end
+
+    it 'Descendants Subgraph' do
+      node = graph[3]
+      subgraph = node.descendants_subgraph
+
+      subgraph.roots.map(&:id).must_equal [3]
+      subgraph[3].children.map(&:id).must_equal [4]
+      subgraph[4].children.map(&:id).must_equal [5]
+      subgraph[5].children.must_be_empty
     end
 
   end
