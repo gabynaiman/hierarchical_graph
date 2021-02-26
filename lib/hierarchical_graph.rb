@@ -103,16 +103,16 @@ class HierarchicalGraph
   end
 
   def subgraph_of(ids)
-    ids.each{ |id| validate_present! id }
+    ids.each { |id| validate_present! id }
 
     HierarchicalGraph.new.tap do |subgraph|
       ids.each do |id|
         subgraph.add_node id, nodes[id].data
       end
-      set_ids = ids.to_set
+
       subgraph.each do |node|
         children_of(node.id).each do |child|
-          subgraph.add_relation parent_id: node.id, child_id: child.id if set_ids.include? child.id
+          subgraph.add_relation parent_id: node.id, child_id: child.id unless subgraph[child.id].nil?
         end
       end
     end

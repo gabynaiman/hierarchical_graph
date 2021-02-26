@@ -17,6 +17,10 @@ class HierarchicalGraph
       data[key] = value
     end
 
+    def root?
+      parents.empty?
+    end
+
     def parents
       graph.parents_of id
     end
@@ -31,10 +35,6 @@ class HierarchicalGraph
 
     def descendants
       graph.descendants_of id
-    end
-
-    def root?
-      parents.empty?
     end
 
     def descendants_subgraph
