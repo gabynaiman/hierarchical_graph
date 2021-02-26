@@ -37,6 +37,10 @@ class HierarchicalGraph
       parents.empty?
     end
 
+    def descendants_subgraph
+      graph.descendants_subgraph_from id
+    end
+
     def to_s
       "<#{self.class.name} #{id} parents:[#{parents.map(&:id).join(', ')}] children:[#{children.map(&:id).join(', ')}]>"
     end

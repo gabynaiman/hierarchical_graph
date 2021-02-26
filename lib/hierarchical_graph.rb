@@ -102,6 +102,26 @@ class HierarchicalGraph
     end.uniq(&:id)
   end
 
+  def subgraph_of(ids)
+    ids.each{ |id| validate_present! id }
+
+    HierarchicalGraph.new.tap do |subgraph|
+      ids.each do |id|
+        subgraph.add_node id, nodes[id].data
+      end
+      set_ids = ids.to_set
+      subgraph.each do |node|
+        children_of(node.id).each do |child|
+          subgraph.add_relation parent_id: node.id, child_id: child.id if set_ids.include? child.id
+        end
+      end
+    end
+  end
+
+  def descendants_subgraph_from(id)
+    subgraph_of [id] + descendants_of(id).map(&:id)
+  end
+
   def to_s
     "<#{self.class.name} nodes:[#{map(&:to_s).join(', ')}]>"
   end
