@@ -1,3 +1,4 @@
+require 'tsort'
 require_relative 'hierarchical_graph/version'
 require_relative 'hierarchical_graph/node'
 
