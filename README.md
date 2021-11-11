@@ -1,7 +1,7 @@
 # HierarchicalGraph
 
 [![Gem Version](https://badge.fury.io/rb/hierarchical_graph.svg)](https://rubygems.org/gems/hierarchical_graph)
-[![Build Status](https://travis-ci.org/gabynaiman/hierarchical_graph.svg?branch=master)](https://travis-ci.org/gabynaiman/hierarchical_graph)
+[![Build Status](https://travis-ci.com/gabynaiman/hierarchical_graph.svg?branch=master)](https://travis-ci.com/gabynaiman/hierarchical_graph)
 [![Coverage Status](https://coveralls.io/repos/github/gabynaiman/hierarchical_graph/badge.svg?branch=master)](https://coveralls.io/github/gabynaiman/hierarchical_graph?branch=master)
 [![Code Climate](https://codeclimate.com/github/gabynaiman/hierarchical_graph.svg)](https://codeclimate.com/github/gabynaiman/hierarchical_graph)
 
